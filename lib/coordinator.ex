@@ -1,21 +1,24 @@
 defmodule Metex.Coordinator do
-  def loop(results \\ [], total_count) do
+  def loop(results \\ %{}, num_remaining) do
     receive do
-      {:ok, data} ->
-        new_results = [data | results]
+      {:ok, arg, value, city} ->
+        new_results =
+          results
+          |> Map.put_new(city, %{})
+          |> Kernel.put_in([city, arg], value)
 
-        if total_count == Enum.count(new_results) do
-          send(self, :exit)
+        if num_remaining == 1 do
+          send(self(), :exit)
         end
 
-        loop(new_results, total_count)
+        loop(new_results, num_remaining - 1)
 
       :exit ->
-        results |> Enum.sort() |> Enum.join(", ") |> IO.inspect()
+        results |> IO.inspect()
 
       _ ->
         IO.puts("unexpected msg")
-        loop(results, total_count)
+        loop(results, num_remaining)
     end
   end
 end

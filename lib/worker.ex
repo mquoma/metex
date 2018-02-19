@@ -1,15 +1,5 @@
 defmodule Metex.Worker do
-  # def loop do
-  #   receive do
-  #     {sender_pid, location} ->
-  #       send(sender_pid, {:ok, temperature_of(location)})
-  #
-  #     _ ->
-  #       IO.puts("cannot process this msg")
-  #   end
-  #
-  #   loop
-  # end
+  import Tuple
 
   def loop_forecast() do
     loop_func(&forecast_of/1)
@@ -19,10 +9,26 @@ defmodule Metex.Worker do
     loop_func(&temperature_of/1)
   end
 
-  def loop_func(arg) do
+  def temperature_of(location) do
+    location
+    |> url_for(:temperature)
+    |> HTTPoison.get()
+    |> parse_response(:temperature)
+    |> append(location)
+  end
+
+  def forecast_of(location) do
+    location
+    |> url_for(:forecast)
+    |> HTTPoison.get()
+    |> parse_response(:forecast)
+    |> append(location)
+  end
+
+  defp loop_func(arg) do
     receive do
       {sender_pid, location} ->
-        send(sender_pid, {:ok, arg.(location)})
+        send(sender_pid, arg.(location))
 
       _ ->
         IO.puts("cannot process this msg")
@@ -31,62 +37,39 @@ defmodule Metex.Worker do
     loop_func(arg)
   end
 
-  def temperature_of(location) do
-    location
-    |> url_for("temperature")
-    |> HTTPoison.get()
-    |> parse_response("temperature")
-    |> case do
-      {:ok, temperature} ->
-        "#{location} - #{temperature} C"
-
-      :error ->
-        "#{location} - error"
-    end
-  end
-
-  def forecast_of(location) do
-    location
-    |> url_for("forecast")
-    |> HTTPoison.get()
-    |> parse_response("forecast")
-    |> case do
-      {:ok, forecast} ->
-        "#{location} - #{forecast}"
-
-      :error ->
-        "#{location} - error"
-    end
-  end
-
   defp url_for(location, arg) do
     location = URI.encode(location)
 
     case arg do
-      "temperature" ->
-        "api.openweathermap.org/data/2.5/weather?q=#{location}&appid=#{api_key}"
+      :temperature ->
+        "api.openweathermap.org/data/2.5/weather?q=#{location}"
+        |> append_api_key()
 
-      "forecast" ->
-        "api.openweathermap.org/data/2.5/forecast?q=#{location}&mode=json&appid=#{api_key}"
+      :forecast ->
+        "api.openweathermap.org/data/2.5/forecast?q=#{location}&mode=json"
+        |> append_api_key()
     end
+  end
+
+  defp append_api_key(url) do
+    "#{url}&appid=#{api_key()}"
   end
 
   defp parse_response({:ok, %HTTPoison.Response{body: body, status_code: 200}}, arg) do
     results =
       body
       |> JSON.decode!()
-      |> IO.inspect()
 
     case arg do
-      "temperature" ->
+      :temperature ->
         results |> compute_temperature()
 
-      "forecast" ->
+      :forecast ->
         results |> compute_forecast()
     end
   end
 
-  defp parse_response(_, arg) do
+  defp parse_response(_resp, _arg) do
     :error
   end
 
@@ -96,7 +79,7 @@ defmodule Metex.Worker do
         (json["main"]["temp"] - 273.15)
         |> Float.round(1)
 
-      {:ok, temperature}
+      {:ok, :temperature, temperature}
     rescue
       _ -> :error
     end
@@ -108,7 +91,7 @@ defmodule Metex.Worker do
         json["list"]
         |> List.first()
 
-      {:ok,
+      {:ok, :forecast,
        (forecast["main"]["temp"] - 273.15)
        |> Float.round(1)}
     rescue
