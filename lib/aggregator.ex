@@ -1,4 +1,4 @@
-defmodule Metex.Coordinator do
+defmodule Metex.Aggregator do
   def loop(results \\ %{}, num_remaining) do
     receive do
       {:ok, prop, value, city} ->
@@ -15,6 +15,7 @@ defmodule Metex.Coordinator do
         loop(new_results, num_remaining - 1)
 
       :exit ->
+        IO.puts "exiting successfully: "
         results |> IO.inspect()
 
       _ ->

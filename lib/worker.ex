@@ -1,5 +1,4 @@
 defmodule Metex.Worker do
-  import Tuple
 
   def loop_forecast() do
     receive do
@@ -26,9 +25,10 @@ defmodule Metex.Worker do
   def get(prop, city) do
     city
     |> url_for(prop)
+    |> append_api_key()
     |> HTTPoison.get()
     |> parse_response(prop)
-    |> append(city)
+    |> Tuple.append(city)
   end
 
   defp url_for(city, prop) do
@@ -37,11 +37,9 @@ defmodule Metex.Worker do
     case prop do
       :temperature ->
         "api.openweathermap.org/data/2.5/weather?q=#{city}"
-        |> append_api_key()
 
       :forecast ->
         "api.openweathermap.org/data/2.5/forecast?q=#{city}&mode=json"
-        |> append_api_key()
     end
   end
 

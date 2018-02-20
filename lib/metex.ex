@@ -3,11 +3,11 @@ defmodule Metex do
   Documentation for Metex.
   """
 
-  alias Metex.Coordinator
+  alias Metex.Aggregator
   alias Metex.Worker
 
   @doc """
-  Get temp and forecast.
+  Take a list of city names. Return a map of temps and forecasts.
   ## Examples
 
       iex> Metex.get_temp_and_forecast
@@ -19,7 +19,7 @@ defmodule Metex do
   """
   def get_temp_and_forecast(cities) do
     num_remaining = Enum.count(cities) * 2
-    coordinator_pid = spawn(Coordinator, :loop, [%{}, num_remaining])
+    coordinator_pid = spawn(Aggregator, :loop, [%{}, num_remaining])
 
     cities
     |> Enum.map(fn city ->
