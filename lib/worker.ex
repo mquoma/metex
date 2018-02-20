@@ -2,51 +2,45 @@ defmodule Metex.Worker do
   import Tuple
 
   def loop_forecast() do
-    loop_func(&forecast_of/1)
-  end
-
-  def loop_temperature() do
-    loop_func(&temperature_of/1)
-  end
-
-  def temperature_of(location) do
-    location
-    |> url_for(:temperature)
-    |> HTTPoison.get()
-    |> parse_response(:temperature)
-    |> append(location)
-  end
-
-  def forecast_of(location) do
-    location
-    |> url_for(:forecast)
-    |> HTTPoison.get()
-    |> parse_response(:forecast)
-    |> append(location)
-  end
-
-  defp loop_func(arg) do
     receive do
-      {sender_pid, location} ->
-        send(sender_pid, arg.(location))
-
+      {sender_pid, city} ->
+        send(sender_pid, (&get/2).(:forecast, city))
       _ ->
         IO.puts("cannot process this msg")
     end
 
-    loop_func(arg)
+    loop_forecast()
   end
 
-  defp url_for(location, arg) do
-    location = URI.encode(location)
+  def loop_temperature() do
+    receive do
+      {sender_pid, city} ->
+        send(sender_pid, (&get/2).(:temperature, city))
+      _ ->
+        IO.puts("cannot process this msg")
+    end
 
-    case arg do
+    loop_temperature()
+  end
+
+  def get(prop, city) do
+    city
+    |> url_for(prop)
+    |> HTTPoison.get()
+    |> parse_response(prop)
+    |> append(city)
+  end
+
+  defp url_for(city, prop) do
+    city = URI.encode(city)
+
+    case prop do
       :temperature ->
-        "api.openweathermap.org/data/2.5/weather?q=#{location}"
+        "api.openweathermap.org/data/2.5/weather?q=#{city}"
         |> append_api_key()
 
       :forecast ->
-        "api.openweathermap.org/data/2.5/forecast?q=#{location}&mode=json"
+        "api.openweathermap.org/data/2.5/forecast?q=#{city}&mode=json"
         |> append_api_key()
     end
   end
@@ -55,12 +49,12 @@ defmodule Metex.Worker do
     "#{url}&appid=#{api_key()}"
   end
 
-  defp parse_response({:ok, %HTTPoison.Response{body: body, status_code: 200}}, arg) do
+  defp parse_response({:ok, %HTTPoison.Response{body: body, status_code: 200}}, prop) do
     results =
       body
       |> JSON.decode!()
 
-    case arg do
+    case prop do
       :temperature ->
         results |> compute_temperature()
 
@@ -69,7 +63,7 @@ defmodule Metex.Worker do
     end
   end
 
-  defp parse_response(_resp, _arg) do
+  defp parse_response(_resp, _prop) do
     :error
   end
 

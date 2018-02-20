@@ -23,8 +23,10 @@ defmodule Metex do
 
     cities
     |> Enum.map(fn city ->
+
       temp_pid = spawn(Worker, :loop_temperature, [])
       forecast_pid = spawn(Worker, :loop_forecast, [])
+
       send(temp_pid, {coordinator_pid, city})
       send(forecast_pid, {coordinator_pid, city})
     end)
