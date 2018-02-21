@@ -2,7 +2,8 @@ defmodule MetexTest do
   use ExUnit.Case
   doctest Metex
 
-  test "greets the world" do
-    assert Metex.hello() == :world
+  test "spawn the Aggregator" do
+    pid = Metex.spawn_aggregator(1)
+    assert is_pid(pid)
   end
 end
