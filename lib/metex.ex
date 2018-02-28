@@ -5,6 +5,7 @@ defmodule Metex do
 
   alias Metex.Aggregator
   alias Metex.Worker
+  alias Metex.WorkerAnagram
 
   @doc """
   Take a list of city names. Return a map of temps and forecasts.
@@ -31,4 +32,19 @@ defmodule Metex do
       send(forecast_pid, {coordinator_pid, city})
     end)
   end
+
+  def get_anagrams(filePath) do
+
+    if File.exists?(filePath) do
+      stream = File.stream!(filePath, [:read, :utf8])
+      data = Enum.reduce stream, %{}, fn(line, m) ->
+        anagram = WorkerAnagram.get(line)
+        m |> Map.put(line, anagram)
+      end
+    end
+
+    data
+
+  end
+
 end
