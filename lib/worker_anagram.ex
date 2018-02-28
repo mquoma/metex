@@ -1,12 +1,24 @@
 defmodule Metex.WorkerAnagram do
 
+  def loop() do
+    receive do
+      {sender_pid, line} ->
+        send(sender_pid, (&get/1).(line))
+      _ ->
+        IO.puts("cannot process this msg")
+    end
+
+    loop()
+  end
+
   def get(input) do
+    result =
     input
     |> url()
     |> append_api_key()
     |> HTTPoison.get([], [timeout: 50_000, recv_timeout: 50_000])
-    |> IO.inspect()
     |> parse_response()
+    {:ok, input, result}
   end
 
   defp url(input) do

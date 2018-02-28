@@ -36,14 +36,25 @@ defmodule Metex do
   def get_anagrams(filePath) do
 
     if File.exists?(filePath) do
-      stream = File.stream!(filePath, [:read, :utf8])
-      data = Enum.reduce stream, %{}, fn(line, m) ->
-        anagram = WorkerAnagram.get(line)
-        m |> Map.put(line, anagram)
-      end
-    end
 
-    data
+      stream = File.stream!(filePath, [:read, :utf8])
+
+      lines = Enum.reduce stream, [],
+        fn(line, lines) -> [line | lines] end
+
+      # data = Enum.reduce stream, %{}, fn(line, m) ->
+      #   anagram = WorkerAnagram.get(line)
+      #   m |> Map.put(line, anagram)
+
+      num_remaining = lines |> Kernel.length()
+      coordinator_pid = spawn(Aggregator, :loop_anagrams, [%{}, num_remaining])
+
+      lines |>
+        Enum.map(fn line ->
+          anagram_pid = spawn(WorkerAnagram, :loop, [])
+          send(anagram_pid, {coordinator_pid, line})
+        end)
+    end
 
   end
 
