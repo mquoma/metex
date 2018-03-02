@@ -1,0 +1,37 @@
+var _user$project$Repl$t_s_o_l = {ctor: '_Tuple0'};
+var _user$project$Repl$record2 = '{\"age\": 42, \"name\": \"sally\"}';
+var _user$project$Repl$record = '{\"age\": 42, \"name\": \"sally\", \"active\": false}';
+var _user$project$Repl$Record = F2(
+	function (a, b) {
+		return {name: a, age: b};
+	});
+var _user$project$Repl$Student = F3(
+	function (a, b, c) {
+		return {name: a, age: b, active: c};
+	});
+var _user$project$Repl$newStudentDecoder = A4(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+	'active',
+	_elm_lang$core$Json_Decode$bool,
+	false,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'age',
+		_elm_lang$core$Json_Decode$int,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'name',
+			_elm_lang$core$Json_Decode$string,
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Repl$Student))));
+var _user$project$Repl$d_e_l_t_r_o_n_3_0_3_0 = A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Repl$newStudentDecoder, _user$project$Repl$record2);
+var _user$project$Repl$studentDecode = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Repl$Student,
+	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'age', _elm_lang$core$Json_Decode$int));
+var _user$project$Repl$studentDecoder = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_user$project$Repl$Student,
+	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'age', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'active', _elm_lang$core$Json_Decode$bool));

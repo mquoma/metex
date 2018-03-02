@@ -1,0 +1,342 @@
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Main$init = {
+	ctor: '_Tuple2',
+	_0: {charCount: 0, firstName: '', email: '', validationMessage: ''},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$Main$Model = F4(
+	function (a, b, c, d) {
+		return {charCount: a, firstName: b, email: c, validationMessage: d};
+	});
+var _user$project$Main$UpdateMsg = function (a) {
+	return {ctor: 'UpdateMsg', _0: a};
+};
+var _user$project$Main$updateMsg = A2(
+	_elm_lang$core$Task$perform,
+	_user$project$Main$UpdateMsg,
+	_elm_lang$core$Task$succeed('Success'));
+var _user$project$Main$ValidateSubmit = {ctor: 'ValidateSubmit'};
+var _user$project$Main$UpdateEmail = function (a) {
+	return {ctor: 'UpdateEmail', _0: a};
+};
+var _user$project$Main$UpdateFirstName = function (a) {
+	return {ctor: 'UpdateFirstName', _0: a};
+};
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$label,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$for('firstName'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('First Name'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$br,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$id('firstName'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$UpdateFirstName),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$label,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$for('email'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Email'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$id('email'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$UpdateEmail),
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$ValidateSubmit),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('submit'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$br,
+													{ctor: '[]'},
+													{ctor: '[]'}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$div,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('validation message:'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$div,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text(model.validationMessage),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$br,
+																{ctor: '[]'},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$div,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text(
+																			_elm_lang$core$Basics$toString(model)),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Main$CountCharacters = function (a) {
+	return {ctor: 'CountCharacters', _0: a};
+};
+var _user$project$Main$ffInput = F2(
+	function (maxlen, model) {
+		return A2(
+			_elm_lang$html$Html$span,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$maxlength(maxlen),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$CountCharacters),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(
+									function (a) {
+										return a - model.charCount;
+									}(maxlen))),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$Main$Failure = function (a) {
+	return {ctor: 'Failure', _0: a};
+};
+var _user$project$Main$Success = function (a) {
+	return {ctor: 'Success', _0: a};
+};
+var _user$project$Main$map = F2(
+	function ($function, functor) {
+		var _p0 = A2(_elm_lang$core$Debug$log, 'functor', functor);
+		if (_p0.ctor === 'Success') {
+			return _user$project$Main$Success(
+				$function(_p0._0));
+		} else {
+			return _user$project$Main$Failure(_p0._0);
+		}
+	});
+var _user$project$Main$apply = F2(
+	function (function1, function2) {
+		var _p1 = {ctor: '_Tuple2', _0: function1, _1: function2};
+		if (_p1._0.ctor === 'Failure') {
+			if (_p1._1.ctor === 'Failure') {
+				return _user$project$Main$Failure(
+					A2(_elm_lang$core$Basics_ops['++'], _p1._0._0, _p1._1._0));
+			} else {
+				return _user$project$Main$Failure(_p1._0._0);
+			}
+		} else {
+			if (_p1._1.ctor === 'Failure') {
+				return _user$project$Main$Failure(_p1._1._0);
+			} else {
+				return _user$project$Main$Success(
+					_p1._0._0(_p1._1._0));
+			}
+		}
+	});
+var _user$project$Main_ops = _user$project$Main_ops || {};
+_user$project$Main_ops['<*>'] = _user$project$Main$apply;
+var _user$project$Main$validateEmail = function (email) {
+	return (!A2(_elm_lang$core$String$contains, '@', email)) ? _user$project$Main$Failure(
+		{
+			ctor: '::',
+			_0: 'Email is not valid.',
+			_1: {ctor: '[]'}
+		}) : _user$project$Main$Success(_elm_lang$core$Platform_Cmd$none);
+};
+var _user$project$Main$validateFirstName = function (name) {
+	return (_elm_lang$core$Native_Utils.cmp(
+		_elm_lang$core$String$length(name),
+		5) < 0) ? _user$project$Main$Failure(
+		{
+			ctor: '::',
+			_0: 'First Name is not fine.',
+			_1: {ctor: '[]'}
+		}) : _user$project$Main$Success(_elm_lang$core$Platform_Cmd$none);
+};
+var _user$project$Main$validateModel = function (model) {
+	return A2(
+		_user$project$Main_ops['<*>'],
+		A2(
+			_user$project$Main_ops['<*>'],
+			_user$project$Main$Success(
+				F2(
+					function (a, b) {
+						return _user$project$Main$updateMsg;
+					})),
+			_user$project$Main$validateFirstName(model.firstName)),
+		_user$project$Main$validateEmail(model.email));
+};
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'CountCharacters':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							charCount: _elm_lang$core$String$length(_p2._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateFirstName':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{firstName: _p2._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateEmail':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{email: _p2._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ValidateSubmit':
+				var _p3 = _user$project$Main$validateModel(model);
+				if (_p3.ctor === 'Success') {
+					return {ctor: '_Tuple2', _0: model, _1: _p3._0};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								validationMessage: _elm_lang$core$Basics$toString(_p3._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _user$project$Main$main = _elm_lang$html$Html$program(
+	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
