@@ -1,5 +1,5 @@
-defmodule Graph do
-  defstruct node: nil,  edges: []
+defmodule Vertex do
+  defstruct node: nil, edges: []
 end
 
 defmodule Stack do
@@ -7,12 +7,12 @@ defmodule Stack do
 
   # Client
 
-  def start_link(default) when is_list(default) do
-    GenServer.start_link(__MODULE__, default)
+  def start_link() do
+    GenServer.start_link(__MODULE__, [])
   end
 
-  def add_node(pid, name) do
-    GenServer.cast(pid, {:add_node, name})
+  def add_node(pid, node) do
+    GenServer.cast(pid, {:add_node, node})
   end
 
   def get_nodes(pid) do
@@ -32,13 +32,13 @@ defmodule Stack do
   end
 
   @impl true
-  def handle_cast({:add_edge, this_node, that_node }, state) do
-    {:noreply, [%Graph{node: name} | state]}
+  def handle_cast({:add_edge, n, m}, state) do
+    {:noreply, [%Vertex{node: n, edges: [{n, m}]} | state]}
   end
 
   @impl true
-  def handle_cast({:add_node, name}, state) do
-    {:noreply, [%Graph{node: name} | state]}
+  def handle_cast({:add_node, node}, state) do
+    {:noreply, [%Vertex{node: node} | state]}
   end
 end
 
